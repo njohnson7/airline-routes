@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import './App.css'
 import data from './data'
 
-console.log(data.getAirlineById(24).name)
+const columns = [
+  { name: 'Airline', property: 'airline' },
+  { name: 'Source Airport', property: 'src' },
+  { name: 'Destination Airport', property: 'dest' },
+]
 
 class App extends Component {
   state = {
@@ -11,7 +15,12 @@ class App extends Component {
     airports: data.airports,
   }
 
-  getAirlineById = data.getAirlineById
+  getAirlineById   = data.getAirlineById
+  getAirportByCode = data.getAirportByCode
+
+  formatValue(property, value = 'name') {
+    return property[value]
+  }
 
   render() {
     return (
@@ -20,31 +29,40 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <table>
-            <thead>
-              <tr>
-                <th>Airline</th>
-                <th>Source Airport</th>
-                <th>Destination Airport</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.state.routes.map(route => (
-                  <tr>
-                    <td>{data.getAirlineById(route.airline).name}</td>
-                    <td>{data.getAirportByCode(route.src).name}</td>
-                    <td>{data.getAirportByCode(route.dest).name}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+          <Table className="routes-table" columns={columns} rows={this.state.routes} format={this.formatValue} />
         </section>
       </div>
     )
   }
 }
 
-console.log(App)
+class Table extends Component {
+  render() {
+    return (
+      <table>
+        <thead>
+          <tr>
+            {
+              this.props.columns.map(column => (
+                <th>{this.props.format(column)}</th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.props.rows.map(row => (
+              <tr>
+                <td>{this.props.format(data.getAirlineById(row.airline))}</td>
+                <td>{this.props.format(data.getAirportByCode(row.src))}</td>
+                <td>{this.props.format(data.getAirportByCode(row.dest))}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    )
+  }
+}
+
 export default App
