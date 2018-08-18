@@ -53,23 +53,43 @@ class Table extends Component {
     super()
     this.state = { currentPage: 1 }
   }
+
+  log = (fn_name = '[FN NAME]') => {
+    console.log(fn_name)
+    console.log('Table.props: ', this.props)
+    console.log('Table.state: ', this.state, JSON.stringify(this.state))
+  }
+
   totalPages = () => {
-    return Math.ceil(this.props.rows / this.props.perPage)
+    return Math.ceil(this.props.rows.length / this.props.perPage)
   }
+
   startIndex = () => {
-    return p(p(this.props.perPage) * (p(this.state.currentPage) - 1))
+    return this.props.perPage * (this.state.currentPage - 1)
   }
+
   endIndex = () => {
-    return p(this.startIndex() + this.props.perPage)
+    return this.startIndex() + this.props.perPage
   }
+
   previousPageClick = () => {
-    this.setState({ currentPage: Math.max(this.state.currentPage - 1, 1) })
-    this.render()
+    if (this.state.currentPage <= 1) {
+      // TODO: disable button
+      return
+    }
+    // this.log('previousPageClick')
+    this.setState({ currentPage: this.state.currentPage - 1 })
   }
+
   nextPageClick = () => {
-    this.setState({ currentPage: Math.min(this.state.currentPage + 1, this.totalPages()) })
-    this.render()
+    if (this.state.currentPage >= this.totalPages()) {
+      // TODO: disable button
+      return
+    }
+    // this.log('nextPageClick')
+    this.setState({ currentPage: this.state.currentPage + 1 })
   }
+
   render() {
     return (
       <div>
@@ -95,9 +115,9 @@ class Table extends Component {
             }
           </tbody>
         </table>
-        <p>Showing {this.props.start + 1}-{this.props.start + this.props.perPage} of {this.props.rows.length} routes</p>
-        <button onClick={this.previousPageClick}>Previous Page</button>
-        <button onClick={this.nextPageClick}>Next Page</button>
+        <p>Showing {this.startIndex() + 1}-{this.startIndex() + this.props.perPage} of {this.props.rows.length} routes</p>
+        <button id='previous' onClick={this.previousPageClick}>Previous Page</button>
+        <button id='next' onClick={this.nextPageClick}>Next Page</button>
       </div>
     )
   }

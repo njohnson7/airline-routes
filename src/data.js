@@ -849,6 +849,7 @@ const routes = [
     {"airline":4951,"src":"FRU","dest":"ULN"}, 
     {"airline":4951,"src":"BSR","dest":"IST"}, 
     {"airline":4951,"src":"NBO","dest":"IST"},   
+    {"airline":24,"src":"DFW","dest":"XNA"}, 
 ]
 
 const airlines = [
