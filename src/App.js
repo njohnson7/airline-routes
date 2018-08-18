@@ -27,6 +27,19 @@ class App extends Component {
     return property[value]
   }
 
+  filter = () => {
+    let airlineId = document.querySelector('#airline').value
+    let airportCode = document.querySelector('#airport').value
+    p(airlineId)
+    p(airportCode)
+    this.setState({
+      routes: data.routes.filter(route => (
+        (!airlineId || route.airline == airlineId)
+        && (!airportCode || route.src == airportCode || route.dest == airportCode)
+      ))
+    })
+  }
+
   render() {
     return (
       <div className="app">
@@ -40,7 +53,7 @@ class App extends Component {
             rows={this.state.routes}
             format={this.formatValue}
             perPage={25}
-            start={0}
+            filter={this.filter}
           />
         </section>
       </div>
@@ -90,9 +103,41 @@ class Table extends Component {
     this.setState({ currentPage: this.state.currentPage + 1 })
   }
 
+  reset = () => {
+    document.querySelector('#filter').reset()
+    this.props.filter()
+  }
+
   render() {
     return (
       <div>
+        <div className='filter'>
+          <form id='filter' onChange={this.props.filter}>
+            <label className='airline'>Show routes on</label>
+            <select id='airline' className='airline'>
+              <option value=''>All Airlines</option>
+              {
+                data.airlines.map(airline => (
+                  <option value={this.props.format(airline, 'id')}>
+                    {this.props.format(airline)}
+                  </option>
+                ))
+              }
+            </select>
+            <label className='airport'>flying in or out of</label>
+            <select id='airport' className='airport'>
+              <option value=''>All Airports</option>
+              {
+                data.airports.map(airport => (
+                  <option value={this.props.format(airport, 'code')}>
+                    {this.props.format(airport)}
+                  </option>
+                ))
+              }
+            </select>
+            <button type='reset' onClick={this.reset}>Show All Routes</button>
+          </form>
+        </div>
         <table>
           <thead>
             <tr>
@@ -115,7 +160,7 @@ class Table extends Component {
             }
           </tbody>
         </table>
-        <p>Showing {this.startIndex() + 1}-{this.startIndex() + this.props.perPage} of {this.props.rows.length} routes</p>
+        <p>Showing {this.startIndex() + 1}-{Math.min(this.startIndex() + this.props.perPage, this.props.rows.length)} of {this.props.rows.length} routes</p>
         <button id='previous' onClick={this.previousPageClick}>Previous Page</button>
         <button id='next' onClick={this.nextPageClick}>Next Page</button>
       </div>
