@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import './App.css'
 import data from './data'
 
-console.log(data)
+console.log(data.getAirlineById(24).name)
 
 class App extends Component {
   state = {
-    routes: data.routes,
+    routes:   data.routes,
     airlines: data.airlines,
     airports: data.airports,
   }
+
+  getAirlineById = data.getAirlineById
 
   render() {
     return (
@@ -30,9 +32,9 @@ class App extends Component {
               {
                 this.state.routes.map(route => (
                   <tr>
-                    <td>{route.airline}</td>
-                    <td>{route.src}</td>
-                    <td>{route.dest}</td>
+                    <td>{data.getAirlineById(route.airline).name}</td>
+                    <td>{data.getAirportByCode(route.src).name}</td>
+                    <td>{data.getAirportByCode(route.dest).name}</td>
                   </tr>
                 ))
               }
@@ -44,10 +46,5 @@ class App extends Component {
   }
 }
 
-class Table extends Component {
-  render() {
-    return <p>42</p>
-  }
-}
-
+console.log(App)
 export default App

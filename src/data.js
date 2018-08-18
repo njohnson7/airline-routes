@@ -849,7 +849,7 @@ const routes = [
     {"airline":4951,"src":"FRU","dest":"ULN"}, 
     {"airline":4951,"src":"BSR","dest":"IST"}, 
     {"airline":4951,"src":"NBO","dest":"IST"},   
-];
+]
 
 const airlines = [
     {"id":24,"name":"American Airlines"}, 
@@ -869,7 +869,7 @@ const airlines = [
     {"id":4533,"name":"Saudi Arabian Airlines"}, 
     {"id":4867,"name":"TAM Brazilian Airlines"}, 
     {"id":4951,"name":"Turkish Airlines"},
-];
+]
 
 const airports = [
     {"code":"YEG","name":"Edmonton International Airport","lat":53.309700012200004,"long":-113.580001831}, 
@@ -1392,7 +1392,14 @@ const airports = [
     {"code":"DOH","name":"Doha International Airport","lat":25.261111,"long":51.565},
     {"code":"WAE","name":"Wadi al-Dawasir Domestic Airport","lat":20.504167,"long":45.199444},
     {"code":"BGG","name":"Bingöl Airport","lat":38.861111,"long":40.5925},
+]
 
-];
+const getAirlineById = id => (
+  airlines.find(airline => airline.id == id)
+)
 
-export default {routes, airlines, airports};
+const getAirportByCode = code => (
+  airports.find(airport => airport.code == code)
+)
+
+export default { routes, airlines, airports, getAirlineById, getAirportByCode }
