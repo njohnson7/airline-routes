@@ -36,7 +36,7 @@ class App extends Component {
       routes: data.routes.filter(route => (
         (!airlineId || route.airline == airlineId)
         && (!airportCode || route.src == airportCode || route.dest == airportCode)
-      ))
+      )),
     })
   }
 
@@ -118,7 +118,7 @@ class Table extends Component {
               <option value=''>All Airlines</option>
               {
                 data.airlines.map(airline => (
-                  <option value={this.props.format(airline, 'id')}>
+                  <option value={this.props.format(airline, 'id')} disabled={!this.props.rows.some(row => row.airline == airline.id)}>
                     {this.props.format(airline)}
                   </option>
                 ))
@@ -129,7 +129,7 @@ class Table extends Component {
               <option value=''>All Airports</option>
               {
                 data.airports.map(airport => (
-                  <option value={this.props.format(airport, 'code')}>
+                  <option value={this.props.format(airport, 'code')} disabled={!this.props.rows.some(row => [row.src, row.dest].includes(airport.code))}>
                     {this.props.format(airport)}
                   </option>
                 ))
