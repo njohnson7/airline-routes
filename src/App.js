@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import './App.css'
 import data from './data'
 
-const p = x => {
-  console.log(x)
-  return x
-}
+// const p = x => {
+//   console.log(x)
+//   return x
+// }
 
 const columns = [
   { name: 'Airline', property: 'airline' },
@@ -20,9 +20,6 @@ class App extends Component {
     airports: data.airports,
   }
 
-  getAirlineById   = data.getAirlineById
-  getAirportByCode = data.getAirportByCode
-
   formatValue(property, value = 'name') {
     return property[value]
   }
@@ -30,8 +27,6 @@ class App extends Component {
   filter = () => {
     let airlineId = document.querySelector('#airline').value
     let airportCode = document.querySelector('#airport').value
-    p(airlineId)
-    p(airportCode)
     this.setState({
       routes: data.routes.filter(route => (
         (!airlineId || route.airline == airlineId)
@@ -67,11 +62,11 @@ class Table extends Component {
     this.state = { currentPage: 1 }
   }
 
-  log = (fn_name = '[FN NAME]') => {
-    console.log(fn_name)
-    console.log('Table.props: ', this.props)
-    console.log('Table.state: ', this.state, JSON.stringify(this.state))
-  }
+  // log = (fn_name = '[FN NAME]') => {
+  //   console.log(fn_name)
+  //   console.log('Table.props: ', this.props)
+  //   console.log('Table.state: ', this.state, JSON.stringify(this.state))
+  // }
 
   totalPages = () => {
     return Math.ceil(this.props.rows.length / this.props.perPage)
@@ -90,7 +85,6 @@ class Table extends Component {
       // TODO: disable button
       return
     }
-    // this.log('previousPageClick')
     this.setState({ currentPage: this.state.currentPage - 1 })
   }
 
@@ -99,20 +93,27 @@ class Table extends Component {
       // TODO: disable button
       return
     }
-    // this.log('nextPageClick')
     this.setState({ currentPage: this.state.currentPage + 1 })
   }
 
-  reset = () => {
-    document.querySelector('#filter').reset()
+  filter = () => {
+    this.setState({
+      currentPage: 1,
+    })
     this.props.filter()
+  }
+
+  reset = (e) => {
+    e.preventDefault()
+    document.querySelector('#filter').reset()
+    this.filter()
   }
 
   render() {
     return (
       <div>
         <div className='filter'>
-          <form id='filter' onChange={this.props.filter}>
+          <form id='filter' onChange={this.filter}>
             <label className='airline'>Show routes on</label>
             <select id='airline' className='airline'>
               <option value=''>All Airlines</option>
